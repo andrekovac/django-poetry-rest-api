@@ -5,13 +5,15 @@ class Show(models.Model):
     """
     A 90s TV show
     """
-    title = models.CharField(max_length=40, unique=True)
-    album_name = models.CharField(max_length=60)
-    duration = models.FloatField()
-    year = models.FloatField()
-    artist = models.CharField(max_length=50)
-    created = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(
+        max_length=50, default=None)  # fields are required by default so no need to specify
+    image = models.CharField(max_length=50, default=None)
+
+    # must be positive number, integerfield can be negative
+    year = models.PositiveIntegerField(default=None)
+    number_of_seasons = models.PositiveIntegerField(default=None)
+    worth_a_watch = models.BooleanField(default=True, null=True)
 
     def __str__(self):
         """Formats entries in the Admin panel"""
-        return f'{self.title} - {self.artist}'
+        return f"{self.title} - {self.year}"
