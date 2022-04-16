@@ -10,7 +10,8 @@
   - [Add a view to list all shows](#add-a-view-to-list-all-shows)
   - [Add a second view to retrieve a particular show](#add-a-second-view-to-retrieve-a-particular-show)
 - [Oh no! We forgot a field in the database!](#oh-no-we-forgot-a-field-in-the-database)
-- [React Client](#react-client)
+- [React Client App](#react-client-app)
+  - [CORS](#cors)
 
 ### Postgres: Switch DB engine from SQLite to Postgres
 
@@ -158,7 +159,7 @@ class ShowSerializer(serializers.ModelSerializer):
 
 4. Test `http://localhost:8000/shows/` in the browser
 
-5. Add `http://localhost:8000/shows/` to your Insomnia or Postman request collection and test the request there.
+5. Add `http://localhost:8000/shows/` to your **Insomnia** or **Postman** request collection and test the request there.
 
 ### Add a second view to retrieve a particular show
 
@@ -168,13 +169,15 @@ class ShowSerializer(serializers.ModelSerializer):
 
     ```python
     class ShowDetailView(APIView):
-        def get(self, request, pk):
+        def get(self, _request, pk):
             show = Show.objects.get(id=pk)
             serialized_shows = ShowSerializer(show, many=False)
             return Response(serialized_shows.data)
     ```
 
 2. Add detail `url` path to `shows/urls.py`:
+
+    We want to establish the route `shows/<some_number>`
 
     ```python
     from django.urls import path
@@ -186,6 +189,9 @@ class ShowSerializer(serializers.ModelSerializer):
     ]
     ```
 
+3. Test `http://localhost:8000/shows/1` in your browser
+4. Test `http://localhost:8000/shows/20` in your browser
+5. Add `http://localhost:8000/shows/1` to your **Insomnia** or **Postman** request collection and test the request there.
 
 
 ## Oh no! We forgot a field in the database!
@@ -200,5 +206,7 @@ class ShowSerializer(serializers.ModelSerializer):
 3. Run migrations
 4. Go to the admin panel and add the number of seasons for all entries.
 
-## React Client
+## React Client App
+
+### CORS
 

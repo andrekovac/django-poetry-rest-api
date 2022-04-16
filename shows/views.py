@@ -11,3 +11,12 @@ class ShowListView(APIView):
         shows = Show.objects.all()
         serialized_shows = ShowSerializer(shows, many=True)
         return Response(serialized_shows.data)
+
+
+class ShowDetailView(APIView):
+    """ Details of a show """
+
+    def get(self, _request, pk):
+        show = Show.objects.get(id=pk)
+        serialized_shows = ShowSerializer(show, many=False)
+        return Response(serialized_shows.data)
