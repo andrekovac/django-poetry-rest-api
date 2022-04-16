@@ -22,7 +22,11 @@ See the `DATABASES` entry in `backend/settings.py`
 ### REST API
 
 - `djangorestframework`
-- Data model serialization (see `shows/views.py`)
+- Data model **serialization** (see `shows/views.py`)
+
+### Connect API to Frontend
+
+- Fetch API data from backend via a React App
 
 ## Re-create this project
 

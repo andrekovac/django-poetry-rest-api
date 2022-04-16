@@ -1,5 +1,7 @@
 ## Django REST API
 
+Table of contents:
+
 - [Django REST API](#django-rest-api)
   - [Postgres: Switch DB engine from SQLite to Postgres](#postgres-switch-db-engine-from-sqlite-to-postgres)
   - [Create a basic Django App](#create-a-basic-django-app)
@@ -12,6 +14,7 @@
 - [Oh no! We forgot a field in the database!](#oh-no-we-forgot-a-field-in-the-database)
 - [React Client App](#react-client-app)
   - [CORS](#cors)
+  - [React Frontend](#react-frontend)
 
 ### Postgres: Switch DB engine from SQLite to Postgres
 
@@ -210,3 +213,106 @@ class ShowSerializer(serializers.ModelSerializer):
 
 ### CORS
 
+Set up **CORS** following [this SO reply](https://stackoverflow.com/a/35761088/3210677).
+
+**Note**: Two things have to be adapted:
+
+1. Just instead of `python -m pip install django-cors-headers` you run:
+
+  ```bash
+  poetry add django-cors-headers
+  ```
+2. For the value in `CORS_ALLOWED_ORIGINS`, instead of port `3030`, use port `3000`.
+
+  So in the file `backend/settings.py` you will add the following:
+
+  ```python
+  CORS_ALLOWED_ORIGINS = [
+      'http://localhost:3000',  # Our react app gets hosted on port `3000`
+  ]
+  ```
+
+The rest is as described in the document.
+
+### React Frontend
+
+1. In a different folder create a new React app via (replace `my-app` with any name you want):
+
+  ```bash
+  npx create-react-app my-app
+  ```
+
+  This will create a new folder `my-app` which contains a basic React App.
+
+2. Replace the contents of `App.js` with
+
+  ```js
+  import { useEffect, useState } from "react";
+
+  const App = () => {
+    const [shows, setShows] = useState([]);
+
+    useEffect(() => {
+      const fetchShows = async () => {
+        const response = await fetch("http://localhost:8000/shows/");
+        const result = await response.json(response);
+        setShows(result);
+      };
+      fetchShows();
+    }, []);
+
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+          backgroundColor: "rgb(120, 52, 90)",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: 44,
+            color: "yellow",
+            fontWeight: "bold",
+          }}
+        >
+          90's TV shows
+        </h1>
+        <div>
+          {shows.map((show) => (
+            <div
+              style={{
+                padding: 15,
+                fontSize: 24,
+                color: "yellow",
+                borderRadius: 5,
+                border: "2px solid yellow",
+              }}
+            >
+              {show.title}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  export default App;
+  ```
+
+
+3. Run the app via `npm start` inside of the React project folder
+
+4. Check out [http://localhost:3000/](http://localhost:3000/) in your browser.
+   
+   - Open the **browser developer tools**. In it, open the **Network** tab.
+   - Refresh the page and you should see that the request has an error.
+   - Go to the `App.js` file and fix the issue!
+   - Also change the variable names to match the topic of your app!
+
+  **Bonus**:
+
+   - Adjust the style of the page if you want to 🎨 😉
