@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-%m&na94^*w=&tye5#ueafgt9fe&w@j&c)unn1lg!5_(kz_f2_p
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "to-bo-filled.herokuapp.com",
+    "django-poetry-rest-api.herokuapp.com",
     "0.0.0.0",
 ]
 
@@ -100,9 +100,6 @@ DATABASES = {
     }
 }
 
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES["default"].update(db_from_env)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -141,7 +138,12 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # Location where django collect all static files
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES["default"].update(db_from_env)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

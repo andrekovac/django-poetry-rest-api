@@ -15,10 +15,6 @@ Table of contents:
 - [React Client App](#react-client-app)
   - [CORS](#cors)
   - [React Frontend](#react-frontend)
-- [Hosting](#hosting)
-  - [Install dependencies](#install-dependencies)
-  - [Build](#build)
-  - [Add Postgres DB](#add-postgres-db)
 
 ### Postgres: Switch DB engine from SQLite to Postgres
 
@@ -320,28 +316,3 @@ The rest is as described in the document.
   **Bonus**:
 
    - Adjust the style of the page if you want to 🎨 😉
-
-## Hosting
-
-### Install dependencies
-
-Make changes in `settings.py` as described [here](https://github.com/TrimHall/sei-flex-django/blob/main/lesson-4.md).
-
-Run `heroku create 90s-shows` to create a heroku app called `90s-shows`
-
-- This adds a new git remote named `heroku`.
-
-Install Heroku buildpacks for poetry and python as described in [this SO reply](https://stackoverflow.com/a/69849137/3210677)
-
-Specify **exact** python version in `pyproject.toml` file. Heroku doesn't accept `^3.9`.
-
-1. Set `python` version to `3.9.12`
-2. Run `poetry update`
-
-### Build
-
-1. Commit your current state
-1. Run `git push heroku main` to push the current state of the app to heroku
-
-### Add Postgres DB
-
