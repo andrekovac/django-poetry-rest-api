@@ -10,37 +10,31 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import environ
 import os
 import dj_database_url
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
-def get_env_value(env_variable):
-    try:
-        return os.environ[env_variable]
-    except KeyError:
-        error_msg = 'Set the {} environment variable'.format(env_variable)
-        raise ImproperlyConfigured(error_msg)
+# Set the project base directory
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+# False if not in os.environ because of casting above
+DEBUG = env('DEBUG')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_env_value('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(get_env_value('DEBUG'))
-
-# if DEBUG:
-#     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-# else:
-#     ALLOWED_HOSTS = ["django-poetry-rest-api.herokuapp.com"]
+SECRET_KEY = env('SECRET_KEY')
 
 ALLOWED_HOSTS = ["django-poetry-rest-api.herokuapp.com",
                  "localhost", "127.0.0.1"]
@@ -106,41 +100,31 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # added this to use postgres as the databse instead of the default sqlite.
 # do this before running the initial migrations or you will need to do it again.
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': '90s-baby',
-#         'HOST': 'localhost',
-#         'PORT': 5432
-#     }
-# }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': get_env_value('DATABASE_NAME'),
-#         'HOST': get_env_value('DATABASE_HOST'),
-#         'PORT': int(get_env_value('DATABASE_PORT')),
-#     }
-# }
-# DATABASES = {}
-# if DEBUG:
-#     DATABASES['default'] = {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': '90s-baby',
-#         'HOST': 'localhost',
-#         'PORT': 5432
-#         # 'ENGINE': 'django.db.backends.postgresql',
-#         # 'NAME': get_env_value('DATABASE_NAME'),
-#         # 'HOST': get_env_value('DATABASE_HOST'),
-#         # 'PORT': int(get_env_value('DATABASE_PORT')),
-#     }
 
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+# Before deployment:
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': '90s-baby',
+#         'HOST': 'localhost',
+#         'PORT': 5432
+#     }
+# }
+
+# After deployment (with .env file):
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://andru@localhost/90s-baby', conn_max_age=600
-    )
+    'default': env.db(),
 }
+
+# After deployment (without .env file)
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=postgres://andru@localhost/90s-baby, conn_max_age=600
+#     )
+# }
 # DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
 
 
@@ -180,13 +164,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# # Extra places for collectstatic to find static files.
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, "static"),
-# )
 # Location where django collect all static files
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
