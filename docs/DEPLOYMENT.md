@@ -4,8 +4,10 @@ Instructions on how to deploy this app to Heroku
 
 - [Deployment](#deployment)
   - [Install dependencies](#install-dependencies)
+  - [Set remote environment variables](#set-remote-environment-variables)
   - [Build](#build)
   - [Add Postgres DB](#add-postgres-db)
+    - [Commit + push](#commit--push)
 
 ## Install dependencies
 
@@ -21,6 +23,17 @@ Specify **exact** python version in `pyproject.toml` file. Heroku doesn't accept
 
 1. Set `python` version to `3.9.12` (released on March 23, 2022) Check [the official python website](https://www.python.org/downloads/) to look up the version numbers of newest releases.
 2. Run `poetry update`
+
+## Set remote environment variables
+
+Change `django-poetry-rest-api` with your app name:
+
+```bash
+heroku config:set ALLOWED_HOSTS=django-poetry-rest-api.herokuapp.com
+heroku config:set SECRET_KEY=DJANGO_SECRET_KEY
+```
+
+Taken from [this guide](https://dev.to/mdrhmn/deploying-django-web-app-using-heroku-updated-1fp).
 
 ## Build
 
@@ -54,9 +67,11 @@ heroku addons:create heroku-postgresql:hobby-dev
 Using the `hobby-dev` plan
 
 
-Copy DB url
+Copy DB url and set it as config variable `DATABASE_URL` in Heroku:
 
-postgres://mkrbdivfayzgyd:923afb541b2b2bb686cc0fa900c3ad3cac0e8aa775bb56e8db58db59a293b641@ec2-18-214-134-226.compute-1.amazonaws.com:5432/d7rhnfh3r24fqj
+```bash
+heroku config:set DATABASE_URL=postgres://mkrbdivfayzgyd:923afb541b2b2bb686cc0fa900c3ad3cac0e8aa775bb56e8db58db59a293b641@ec2-18-214-134-226.compute-1.amazonaws.com:5432/d7rhnfh3r24fqj
+```
 
 if your local DB name is `90s-baby` and the remote heroku DB is `postgresql-acute-92386`:
 
@@ -65,3 +80,11 @@ PGUSER= PGPASSWORD= heroku pg:push postgres://localhost/90s-baby postgresql-acut
 ```
 
 `Procfile`: `web: gunicorn backend.wsgi` where `backend` is your Django project name
+
+### Commit + push
+
+```bash
+git add -A && commit -m "new commit"
+
+git push heroku main
+```
