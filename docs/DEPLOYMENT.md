@@ -126,7 +126,7 @@ This file tells heroku which command to run as soon as everything is uploaded an
    - If one of the last lines is `remote: Verifying deploy... done.` everything was successful.
    - You should see a link to your website.
 
-  ... and see this error:
+  ... and see this error (or something similar):
 
   <img width="1840" alt="image" src="https://user-images.githubusercontent.com/1945462/163723504-a00081f2-abde-446c-82d8-8ef3279dcd6b.png">
 
