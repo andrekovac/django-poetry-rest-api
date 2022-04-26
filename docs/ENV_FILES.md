@@ -6,6 +6,8 @@
 poetry add django-environ
 ```
 
+Run `poetry update` to install the new dependency.
+
 ## `.env` and `.env.example` file
 
 ```

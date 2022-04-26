@@ -9,9 +9,7 @@ Instructions on how to deploy this Django app to Heroku
   - [Configuration in `settings.py`](#configuration-in-settingspy)
   - [Heroku Procfile](#heroku-procfile)
   - [Build](#build)
-  - [Add Postgres DB](#add-postgres-db)
-    - [Create a Postgres DB in the cloud via:](#create-a-postgres-db-in-the-cloud-via)
-    - [Set `DATABASE_URL` heroku config variable](#set-database_url-heroku-config-variable)
+  - [Database](#database)
     - [Sync your local DB with remote DB](#sync-your-local-db-with-remote-db)
   - [Set two more heroku config variables](#set-two-more-heroku-config-variables)
   - [Commit + push](#commit--push)
@@ -132,31 +130,11 @@ This file tells heroku which command to run as soon as everything is uploaded an
 
   <img width="1840" alt="image" src="https://user-images.githubusercontent.com/1945462/163723504-a00081f2-abde-446c-82d8-8ef3279dcd6b.png">
 
-## Add Postgres DB
-
-### Create a Postgres DB in the cloud via:
-
-Run this command:
-
-```bash
-heroku addons:create heroku-postgresql:hobby-dev
-```
-
-- **Note**: `hobby-dev` describes the free heroku plan
-
-### Set `DATABASE_URL` heroku config variable
-
-1. Run `heroku config -s`. It prints the set config variabes (basically environment variables in the cloud) on the heroku server.
-2. You will probably see a variable which has a similar name to `HEROKU_POSTGRESQL_NAVY_URL` (the color name might not be `NAVY` in your case but a different color)
-3. Copy the DB url (which starts with `'postgres://`) and set it as config variable `DATABASE_URL` in Heroku with this command:
-
-```bash
-heroku config:set DATABASE_URL=<YOUR_COPIED_DATABASE_URL_GOES_HERE>
-```
+## Database
 
 ### Sync your local DB with remote DB
 
-1. Run `heroku pg:info`
+1. Run `heroku pg:info` to get information about your Heroku database in the cloud
 2. The last line will contain your heroku DB name (e.g. `postgresql-acute-92386`). You'll need this name in a second
 3. Note down your local DB name (check it out in e.g. **TablePlus**)
 4. With my local DB name `90s-baby` and the remote heroku DB name `postgresql-acute-92386` I ran:
@@ -184,6 +162,8 @@ Run the same command but just replace `90s-baby` and `postgresql-acute-92386` wi
   ```bash
   heroku config:set SECRET_KEY=DJANGO_SECRET_KEY
   ```
+
+  (**Side note**: You can create a new secret key with `python -c "import secrets; print(secrets.token_urlsafe())"`. Make sure that you then update the `SECRET_KEY` value in `settings.py` as well as the Heroku config value `SECRET_KEY`)
 
 Partly taken from [this guide](https://dev.to/mdrhmn/deploying-django-web-app-using-heroku-updated-1fp).
 
