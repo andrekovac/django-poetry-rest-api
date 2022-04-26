@@ -22,10 +22,10 @@ Instructions on how to deploy this Django app to Heroku
 Run the following command in the project folder:
 
 ```bash
-poetry add dj_database_url gunicorn
+poetry add dj_database_url gunicorn whitenoise
 ```
 
-This will install dependencies `dj_database_url`, `gunicorn`.
+This will install dependencies `dj_database_url`, `gunicorn` and `whitenoise`.
 
 ## Create heroku app
 
@@ -71,12 +71,21 @@ You can view your heroku apps from the command line with `heroku apps` or by goi
 
 ## Configuration in `settings.py`
 
+1. Right after the `STATIC_URL` value, add the following:
+
+  ```python
+  # Location where django collect all static files
+  STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+  STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+  ```
+
 2. Replace the `DATABASES` entry with the following:
 
   ```python
   DATABASES = {
       'default': dj_database_url.config(
-          default='postgres://andru@localhost/90s-baby'
+          default='postgres://andru@localhost/90s-baby', conn_max_age=600
       )
   }
   ```
@@ -89,6 +98,20 @@ You can view your heroku apps from the command line with `heroku apps` or by goi
   ```
   
   where you replace `django-poetry-rest-api.herokuapp.com` with your heroku app. **Attention**: It's your URL `https://django-poetry-rest-api.herokuapp.com/` **without** the `https://` part.
+
+4. `MIDDLEWARE`
+
+  Django also doesn't support production fileserving, so to cover this, we have some whitenoise settings to add.
+
+  Add this as last entry in `MIDDLEWARE`:
+
+  ```python
+  MIDDLEWARE = [
+      ...,
+      # Simplified static file serving: https://warehouse.python.org/project/whitenoise/
+      "whitenoise.middleware.WhiteNoiseMiddleware",
+  ]
+  ```
 
 ## Heroku Procfile
 
