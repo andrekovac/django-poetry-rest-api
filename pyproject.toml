@@ -5,11 +5,15 @@ description = ""
 authors = ["André Kovac <me@andrekovac.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "3.9.12"
 Django = "^4.0.4"
 psycopg2 = "^2.9.3"
 djangorestframework = "^3.13.1"
 django-cors-headers = "^3.11.0"
+dj-database-url = "^0.5.0"
+gunicorn = "^20.1.0"
+whitenoise = "^6.0.0"
+django-environ = "^0.8.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
