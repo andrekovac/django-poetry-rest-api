@@ -1,0 +1,24 @@
+[
+  {
+    "model": "shows.show",
+    "pk": 1,
+    "fields": {
+      "title": "Clarissa Explains It All (changed)",
+      "image": "https://images2.minutemediacdn.com/image/upload/c_",
+      "year": 1991,
+      "number_of_seasons": 5,
+      "worth_a_watch": true
+    }
+  },
+  {
+    "model": "shows.show",
+    "pk": 1,
+    "fields": {
+      "title": "Clarissa Explains It All (changed)",
+      "image": "https://images2.minutemediacdn.com/image/upload/c_",
+      "year": 1991,
+      "number_of_seasons": 5,
+      "worth_a_watch": true
+    }
+  }
+]
