@@ -213,26 +213,43 @@ class ShowSerializer(serializers.ModelSerializer):
 
 ### CORS
 
-Set up **CORS** following [this SO reply](https://stackoverflow.com/a/35761088/3210677).
+Follow these steps:
 
-**Note**: Two things have to be adapted:
-
-1. Just instead of `python -m pip install django-cors-headers` you run:
+1. Run:
 
   ```bash
   poetry add django-cors-headers
   ```
-2. For the value in `CORS_ALLOWED_ORIGINS`, instead of port `3030`, use port `3000`.
 
-  So in the file `backend/settings.py` you will add the following:
+2. Add `corsheaders` to your installed apps:
+
+  ```python
+  INSTALLED_APPS = (
+      ...
+      'corsheaders', # <- this line is new!
+      ...
+  )
+  ```
+
+3. Add a middleware class to listen in on responses:
+
+  ```python
+  MIDDLEWARE = [
+      ...,
+      'corsheaders.middleware.CorsMiddleware', # <- this line is new!
+      'django.middleware.common.CommonMiddleware',
+      ...,
+  ]
+  ```
+
+4. In the file `backend/settings.py` add `CORS_ALLOWED_ORIGINS` with the following content:
 
   ```python
   CORS_ALLOWED_ORIGINS = [
       'http://localhost:3000',  # Our react app gets hosted on port `3000`
+      'http://127.0.0.1:3000'
   ]
   ```
-
-The rest is as described in the document.
 
 ### React Frontend
 
