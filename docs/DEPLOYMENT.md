@@ -132,6 +132,15 @@ This file tells heroku which command to run as soon as everything is uploaded an
 
 ## Database
 
+A databse should have been automatically created for you. To check whether it did, look at the heroku dashboard.
+If you see a DB dyno there, the database was created for you. If there is no dyno, then run the following command:
+
+```bash
+heroku addons:create heroku-postgresql:hobby-dev
+```
+
+- **Note**: `hobby-dev` describes the free heroku plan
+
 ### Sync your local DB with remote DB
 
 1. Run `heroku pg:info` to get information about your Heroku database in the cloud
