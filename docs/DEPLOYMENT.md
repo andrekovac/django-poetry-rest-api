@@ -13,7 +13,10 @@ Instructions on how to deploy this Django app to Heroku
     - [Sync your local DB with remote DB](#sync-your-local-db-with-remote-db)
   - [Set two more heroku config variables](#set-two-more-heroku-config-variables)
   - [Commit + push](#commit--push)
-  - [Increase secruity with `.env` files](#increase-secruity-with-env-files)
+  - [View DB tables of your deployed backend](#view-db-tables-of-your-deployed-backend)
+  - [Other](#other)
+    - [Re-populate your remote db](#re-populate-your-remote-db)
+    - [Increase secruity with `.env` files](#increase-secruity-with-env-files)
 
 ## Install dependencies
 
@@ -195,6 +198,47 @@ A commit to the `main` branch of the git `heroku` remote will trigger a new depl
 
 4. Test whether your requests work in **Insomnia** or **Postman** or via your Frontend App.
 
-## Increase secruity with `.env` files
+  **Note**: Change `http://localhost:8000` with the heroku url of your deployed backend. 
+
+## View DB tables of your deployed backend
+
+1. Create a new database connection 
+   ![new connection](./images/create_new_connection.png)
+2. Go to your database from the Heroku dashboard of your project
+
+  ![heroku db](./images/heroku_db.png)
+
+3. There in `Settings` > `Database Credentials` > `View Credentials...`
+
+  ![heroku db settings](./images/heroku_db_settings.png)
+
+4. Enter the info into Table Plus and hit `Test`.
+
+  ![table plus](./images/table_plus_new_connection.png)
+
+5. If all is green, then hit connect and you can view your remote heroku DB
+
+
+## Other
+
+### Re-populate your remote db
+
+1. Empty your DB (destructive action)
+
+  ```bash
+  heroku pg:reset
+  ```
+
+2. Push your current local DB up to heroku:
+
+
+  ```bash
+  PGUSER= PGPASSWORD= heroku pg:push postgres://localhost/90s-baby postgresql-acute-92386
+  ```
+
+  - Replace `90s-baby` with your local DB name and `postgresql-acute-92386` with your Heroku
+  - Check out [this section of the deployment guide](./DEPLOYMENT.md#sync-your-local-db-with-remote-db) for more elaborate instructions on this.
+
+### Increase secruity with `.env` files
 
 Follow the guide [ENV_FILES.md](./ENV_FILES.md) to increase the security of your deployed app.
