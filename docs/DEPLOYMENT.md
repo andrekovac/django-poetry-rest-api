@@ -57,13 +57,21 @@ If you don't provide a name, heroku will give it a random one. I picked `90s-sho
 You can view your heroku apps from the command line with `heroku apps` or by going to the [Heroku dashboard](https://dashboard.heroku.com/).
 ## Heroku & Poetry compatibility
 
-1. In order to support **poetry**, we need to replace the heroku buildpacks. To do so, run the following three commands (taken from [this SO reply](https://stackoverflow.com/a/69849137/3210677)):
+1. In order to support **poetry**, we need to replace the heroku buildpacks. To do so, run the following three commands (taken from [this SO reply](https://stackoverflow.com/a/69849137/3210677)) one after the other:
 
   ```sh
   heroku buildpacks:clear
+  ```
+
+  ```sh
   heroku buildpacks:add https://github.com/moneymeets/python-poetry-buildpack.git
+  ```
+
+  ```sh
   heroku buildpacks:add heroku/python
   ```
+
+  **Note**: If these commands cause errors for you please run the two commands mentioned in [this StackOverFlow reply](https://stackoverflow.com/a/70569349/3210677).
 
 2. Specify **exact** python version in `pyproject.toml` file. Heroku doesn't accept `^3.9`.
 
@@ -81,7 +89,9 @@ You can view your heroku apps from the command line with `heroku apps` or by goi
   STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
   ```
 
-2. Replace the `DATABASES` entry with the following:
+2. At the top of `settings.py` add `import os` (the red squigly line in `STATIC_ROOT = os.path.join(BASE_DIR, "static")` should now be gone).
+
+3. Replace the `DATABASES` entry with the following:
 
   ```python
   DATABASES = {
@@ -91,7 +101,11 @@ You can view your heroku apps from the command line with `heroku apps` or by goi
   }
   ```
 
-3. Change `ALLOWED_HOSTS` to:
+4. Import `dj_database_url`:
+   
+   Add `import dj_database_url` at the top of `settings.py`.
+
+5. Change `ALLOWED_HOSTS` to:
 
   ```python
   ALLOWED_HOSTS = ["django-poetry-rest-api.herokuapp.com",
@@ -100,7 +114,7 @@ You can view your heroku apps from the command line with `heroku apps` or by goi
   
   where you replace `django-poetry-rest-api.herokuapp.com` with your heroku app. **Attention**: It's your URL `https://django-poetry-rest-api.herokuapp.com/` **without** the `https://` part.
 
-4. `MIDDLEWARE`
+6. `MIDDLEWARE`
 
   Django also doesn't support production fileserving, so to cover this, we have some whitenoise settings to add.
 

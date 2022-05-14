@@ -4,10 +4,10 @@ Instructions on how to deploy a React Frontend with React Router to [Netlify](ht
 
 ## Prepare your frontend for 
 
-- Add a `config.js` to `client/src` and add the following code:
+- Add a `config.js` to the `src` folder in your frontend and add the following code:
 
   ```js
-  const DEV_API_URL = "http://localhost:4000"
+  const DEV_API_URL = "http://localhost:3000"
   const PROD_API_URL = process.env.REACT_APP_API_URL
   export const API_URL =
     process.env.NODE_ENV === "production" ? PROD_API_URL : DEV_API_URL
@@ -16,7 +16,7 @@ Instructions on how to deploy a React Frontend with React Router to [Netlify](ht
 * To your `.env` file add the following - replacing with your own backend URL.
 
 ```
-REACT_APP_PROD_URL=myherokubackendurl.herokuapp.com/api
+REACT_APP_PROD_URL=myherokubackendurl.herokuapp.com
 ```
 
 ## Create new site in Netlify
@@ -48,9 +48,22 @@ To allow React router to work properly, do the following:
   /*    /index.html   200
   ```
 
-2. Commit and push this code -> This should trigger a redirect.
+2. Commit and push this code -> This should trigger a re-deploy.
 
 **Note**: If this is done wrong you'll get `404` errors when routing to routes different from `/`.
+
+
+## Add netlify URL to CORS allowed origins
+
+```python
+CORS_ALLOWED_ORIGINS = [
+    '', # <-- Add your netlify URL here!
+    'http://localhost:3000',  # Our react app gets hosted on port `3000`
+    'http://127.0.0.1:3000',
+]
+```
+
+add the netlify URL of your frontend here
 
 ## Troubleshooting
 
